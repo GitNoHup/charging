@@ -1,0 +1,19 @@
+.container {
+    text-align: center;
+    height: 350px;
+    line-height: 350px; /*通过设置行高，达到垂直居中的目的*/
+}
+
+.point {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+
+.pop {
+    width: 1000px;
+    height: 500px;
+    position: absolute;
+    left: -500px;
+    top: -250px;
+}

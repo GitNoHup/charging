@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome Page</title>
+    <link type="text/css" href="/css/index.css" rel="stylesheet"/>
+    <link type="text/css" href="/lib/layerui/css/layui.css" rel="stylesheet"/>
+    <script>
+
+    </script>
+</head>
+<body>
+<!--<div class="container">
+    <p style="font-size: 120px;font-family: Consolas">Charging</p>
+</div>-->
+<!--<div class="container">
+    <i class="layui-icon layui-icon-tree" style="font-size: 100px; color: slategrey" onClick="window.location.href='/index/view'"></i>
+</div>-->
+<div class="container">
+    <form id="addForm">
+        <label class="layui-form-label form-require">上传附件</label>
+        <div class="layui-input-block">
+            <input type="file" name="file" lay-verify="required" class="layui-input">
+            <i class="icon_ca_layui"></i>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-danger" lay-submit lay-filter="form">确认</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="/lib/bootstrapTable/bootstrap-table.js"></script>
+<script type="text/javascript" src="/lib/bootstrapTable/bootstrap.min.js"></script>
+<script type="text/javascript" src="/lib/bootstrapTable/bootstrap-table-export.js"></script>
+<script type="text/javascript" src="/lib/bootstrapTable/tableExport.js"></script>
+<script type="text/javascript" src="/lib/bootstrapTable/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript" src="/lib/layerui/layui.js"></script>
+<script type="text/javascript" src="/lib/sto/sto.js"></script>
+<script>
+
+    layui.use(['layer','form', 'test', 'autocomplete', 'http'], function() {
+        var form = layui.form()
+            , layer = layui.layer
+            , test = layui.test
+            , autocomplete = layui.autocomplete
+            , http = layui.http;
+        test.restVal();
+        test.selectMove();
+        test.formToggle({
+            ifTableResize: true
+        });
+
+
+        //提交表单
+        form.on('submit(form)', function (data) {
+            var loadIndex = layer.load(0);
+            var form = new FormData(document.getElementById("addForm"));
+            $.ajax({
+                url: "/deal/import",
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    layer.close(loadIndex);
+                    if (response.respCode != "000") {
+                        layer.msg(!response.resMessage ? "服务异常" : response.resMessage, {icon: 5});
+                        return;
+                    }
+
+                    parent.openPreview(response.data);
+                    var index = parent.layer.getFrameIndex(window.name);
+
+                    parent.layer.close(index);
+                },
+                error: function (e) {
+                    layer.close(loadIndex);
+                    layer.msg(!response.resMessage ? "链接超时" : response.resMessage, {icon: 5});
+                }
+            });
+            return false;
+        });
+    })
+
+</script>
+
+</body>
+</html>
