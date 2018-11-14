@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +42,14 @@ public class ExcelUtil {
 
     private static void downLoadExcel(String fileName, HttpServletResponse response, Workbook workbook) {
         try {
-            response.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("utf-8");
             response.setHeader("content-Type", "application/vnd.ms-excel");
             response.setHeader("Content-Disposition",
                     "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
-            workbook.write(response.getOutputStream());
+            OutputStream outputStream = response.getOutputStream();
+            workbook.write(outputStream);
+            outputStream.flush();
+            outputStream.close();
         } catch (IOException e) {
             log.error(e.getMessage());
         }

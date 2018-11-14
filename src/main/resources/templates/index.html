@@ -55,7 +55,6 @@
             ifTableResize: true
         });
 
-
         //提交表单
         form.on('submit(form)', function (data) {
             var loadIndex = layer.load(0);
@@ -64,23 +63,12 @@
                 url: "/deal/import",
                 type: "POST",
                 data: form,
+                async: false,
                 processData: false,
                 contentType: false,
                 success: function (response) {
                     layer.close(loadIndex);
-                    if (response.respCode != "000") {
-                        layer.msg(!response.resMessage ? "服务异常" : response.resMessage, {icon: 5});
-                        return;
-                    }
-
-                    parent.openPreview(response.data);
-                    var index = parent.layer.getFrameIndex(window.name);
-
-                    parent.layer.close(index);
-                },
-                error: function (e) {
-                    layer.close(loadIndex);
-                    layer.msg(!response.resMessage ? "链接超时" : response.resMessage, {icon: 5});
+                    http.post("/deal/export");
                 }
             });
             return false;
